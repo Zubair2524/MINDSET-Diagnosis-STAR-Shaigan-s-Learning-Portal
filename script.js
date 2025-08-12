@@ -116,74 +116,37 @@ function submitResultsToSheet() {
   
   const growthPercentage = Math.round((totalGrowthScore / (totalQuestions * 100)) * 100);
   
-  const data = {
-    fullName: userData.fullName,
-    designation: userData.designation,
-    city: userData.city,
-    team: userData.team,
-    score: growthPercentage
-  };
-  
-  console.log('Submitting data:', data);
-  
-  // Try FormData first
   const formData = new FormData();
-  Object.entries(data).forEach(([key, value]) => formData.append(key, value));
-  
+  formData.append('Full Name', userData.fullName);
+  formData.append('Designation', userData.designation);
+  formData.append('Team/Department', userData.team);
+  formData.append('Base City', userData.city);
+  formData.append('Date', new Date().toISOString().split('T')[0]);
+  formData.append('Email', '');
+  formData.append('Cell Number', '');
+  formData.append('Book', 'Mindset Assessment');
+  formData.append('Score', growthPercentage.toString());
+  formData.append('Grade', '');
+  formData.append('Summary Time', '');
+  formData.append('Quiz Time', '');
+
   fetch(APPS_SCRIPT_URL, {
     method: 'POST',
     body: formData
   })
-  .then(response => {
-    console.log('FormData Response:', { status: response.status, ok: response.ok });
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(result => {
-    console.log('Server response:', result);
-    if (result.result === 'success') {
-      console.log('Data successfully submitted:', data);
+  .then(response => response.json())
+  .then(data => {
+    if (data.result === 'success') {
+      console.log('Quiz results submitted successfully:', data);
     } else {
-      console.error('Server error:', result.error);
-      alert('Failed to submit results: ' + result.error);
+      console.error('Error submitting quiz results:', data.error);
     }
   })
   .catch(error => {
-    console.error('FormData submission failed:', error);
-    // Fallback to URL-encoded data
-    console.log('Attempting URL-encoded fallback');
-    const urlEncoded = new URLSearchParams(data).toString();
-    fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: urlEncoded,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
-    .then(response => {
-      console.log('URL-encoded Response:', { status: response.status, ok: response.ok });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(result => {
-      console.log('Server response:', result);
-      if (result.result === 'success') {
-        console.log('Data successfully submitted:', data);
-      } else {
-        console.error('Server error:', result.error);
-        alert('Failed to submit results: ' + result.error);
-      }
-    })
-    .catch(fallbackError => {
-      console.error('URL-encoded submission failed:', fallbackError);
-      alert('Error submitting results: ' + fallbackError.message);
-    });
+    console.error('Error submitting quiz results:', error);
   });
 }
+
 // Start the quiz
 function startQuiz() {
   isQuizActive = true;
