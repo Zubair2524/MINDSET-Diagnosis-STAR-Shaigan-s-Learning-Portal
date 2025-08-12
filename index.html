@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mindset Assessment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="background-animation"></div>
+
+  <!-- Landing Page -->
+  <div id="landing-page" class="page active">
+    <div class="container">
+      <div class="welcome-card">
+        <div class="logo-section">
+          <div class="mindset-icon">🧠</div>
+          <h1 class="main-title">STAR-Shaigan's Learning Portal</h1>
+          <h1 class="main-title">Mindset Assessment</h1>
+          <p class="subtitle">Discover Your Psychology of Success</p>
+        </div>
+
+        <form id="user-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <input type="text" id="fullName" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+              <label for="designation">Designation</label>
+              <input type="text" id="designation" placeholder="Enter your designation" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city">City</label>
+              <input type="text" id="city" placeholder="Enter your city" required>
+            </div>
+            <div class="form-group">
+              <label for="team">Team</label>
+              <input type="text" id="team" placeholder="Enter your team" required>
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">
+            <span>Begin Assessment</span>
+            <div class="btn-glow"></div>
+          </button>
+        </form>
+
+        <div class="quote">
+          <p>"In a growth mindset, challenges are exciting rather than threatening."</p>
+          <cite>— Carol S. Dweck</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Page -->
+  <div id="quiz-page" class="page">
+    <div class="quiz-header">
+      <div class="container">
+        <div class="header-content">
+          <h2>Welcome, <span id="user-name-header"></span></h2>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <span id="progress-text">Scenario 1 of 5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="quiz-card">
+        <div class="scenario-number">Scenario <span id="scenario-number">1</span></div>
+        <div id="scenario-text" class="scenario-text"></div>
+        <div id="questions-section"></div>
+        <div class="quiz-actions">
+          <button id="next-btn" class="action-btn" disabled>
+            <span>Next Scenario</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Page -->
+  <div id="results-page" class="page">
+    <div class="container">
+      <div class="certificate-container">
+        <div class="certificate-header">
+          <div class="certificate-logo">🏆</div>
+          <h1>Mindset Assessment Certificate</h1>
+          <p class="certificate-subtitle">Psychology of Success Evaluation</p>
+        </div>
+
+        <div class="certificate-body">
+          <div class="participant-info">
+            <h2 id="cert-name"></h2>
+            <p class="participant-details" id="cert-designation"></p>
+            <p class="participant-details" id="cert-city"></p>
+            <p class="participant-details" id="cert-team"></p>
+          </div>
+
+          <div class="mindset-results">
+            <div class="mindset-scores">
+              <div class="mindset-item growth">
+                <div class="mindset-icon">🌱</div>
+                <div class="mindset-details">
+                  <h3>Growth Mindset</h3>
+                  <div class="score-bar">
+                    <div id="growth-fill" class="score-fill growth-fill"></div>
+                  </div>
+                  <span id="growth-percentage" class="score-percentage">0%</span>
+                </div>
+              </div>
+              <div class="mindset-item fixed">
+                <div class="mindset-icon">🔒</div>
+                <div class="mindset-details">
+                  <h3>Fixed Mindset</h3>
+                  <div class="score-bar">
+                    <div id="fixed-fill" class="score-fill fixed-fill"></div>
+                  </div>
+                  <span id="fixed-percentage" class="score-percentage">0%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="dominant-mindset">
+              <h3>Your Dominant Mindset</h3>
+              <div id="mindset-result" class="mindset-result"></div>
+              <p id="encouragement-text" class="encouragement"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="certificate-footer">
+          <span id="certificate-date" class="date"></span>
+          <span class="signature">Senior SFE Manager, Zubair Ahmad</span>
+        </div>
+
+        <p style="text-align: center; margin-top: 20px;">Awarded by STAR-Shaigan's Learning Portal</p>
+
+        <div class="certificate-actions">
+          <button id="download-pdf" class="action-btn download">📄 Download Certificate</button>
+          <button id="retake-assessment" class="action-btn retake">🔄 Retake Assessment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="scenarios.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
