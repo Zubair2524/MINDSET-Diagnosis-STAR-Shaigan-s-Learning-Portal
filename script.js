@@ -114,21 +114,16 @@ function submitResultsToSheet() {
   
   const growthPercentage = Math.round((totalGrowthScore / (totalQuestions * 100)) * 100);
   
-  const data = {
-    fullName: userData.fullName,
-    designation: userData.designation,
-    city: userData.city,
-    team: userData.team,
-    score: growthPercentage
-  };
+  const formData = new FormData();
+  formData.append('fullName', userData.fullName);
+  formData.append('designation', userData.designation);
+  formData.append('city', userData.city);
+  formData.append('team', userData.team);
+  formData.append('score', growthPercentage);
   
   fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data),
-    mode: 'cors'
+    body: formData
   })
   .then(response => {
     if (!response.ok) {
@@ -138,10 +133,10 @@ function submitResultsToSheet() {
   })
   .then(result => {
     if (result.result === 'success') {
-      console.log('Data successfully submitted to Google Sheet:', data);
+      console.log('Data successfully submitted to Google Sheet:', Object.fromEntries(formData));
     } else {
-      console.error('Server responded with error:', result.message);
-      alert('Failed to submit results to Google Sheet: ' + result.message);
+      console.error('Server responded with error:', result.error);
+      alert('Failed to submit results to Google Sheet: ' + result.error);
     }
   })
   .catch(error => {
