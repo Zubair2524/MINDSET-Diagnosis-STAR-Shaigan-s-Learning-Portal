@@ -117,12 +117,12 @@ function submitResultsToForm() {
   const growthPercentage = Math.round((totalGrowthScore / (totalQuestions * 100)) * 100);
   
   const formData = new FormData();
-  formData.append('entry.1234567890', userData.fullName); // Replace with actual entry ID for FullName
-  formData.append('entry.1234567891', userData.designation); // Replace with actual entry ID for Designation
-  formData.append('entry.1234567892', userData.team); // Replace with actual entry ID for Team
-  formData.append('entry.1234567893', userData.city); // Replace with actual entry ID for City
-  formData.append('entry.1234567894', userData.assessmentCount.toString()); // Replace with actual entry ID for AssessmentCount
-  formData.append('entry.1234567895', new Date().toISOString()); // Replace with actual entry ID for Timestamp
+  formData.append('entry.1990200501', userData.fullName); // FullName
+  formData.append('entry.980754165', userData.designation); // Designation
+  formData.append('entry.1764798855', userData.team); // Team
+  formData.append('entry.123966579', userData.city); // City
+  formData.append('entry.267319038', userData.assessmentCount.toString()); // AssessmentCount
+  formData.append('entry.4444444444', new Date().toISOString()); // Timestamp (placeholder; adjust if ID found)
   
   fetch(FORM_URL, {
     method: 'POST',
