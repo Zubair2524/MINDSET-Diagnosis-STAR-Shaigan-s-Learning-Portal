@@ -117,20 +117,25 @@ function submitResultsToForm() {
   const growthPercentage = Math.round((totalGrowthScore / (totalQuestions * 100)) * 100);
   
   const formData = new FormData();
-  formData.append('entry.1990200501', userData.fullName); // FullName
-  formData.append('entry.980754165', userData.designation); // Designation
-  formData.append('entry.1764798855', userData.team); // Team
-  formData.append('entry.123966579', userData.city); // City
-  formData.append('entry.267319038', userData.assessmentCount.toString()); // AssessmentCount
-  formData.append('entry.4444444444', new Date().toISOString()); // Timestamp (placeholder; adjust if ID found)
+  formData.append('entry.1990200501', userData.fullName || ''); // FullName
+  formData.append('entry.980754165', userData.designation || ''); // Designation
+  formData.append('entry.1764798855', userData.team || ''); // Team
+  formData.append('entry.123966579', userData.city || ''); // City
+  formData.append('entry.267319038', userData.assessmentCount.toString() || '0'); // AssessmentCount
+  formData.append('entry.4444444444', new Date().toISOString() || ''); // Timestamp (placeholder)
   
+  // Debug log to verify data
+  for (let pair of formData.entries()) {
+    console.log(`FormData: ${pair[0]} = ${pair[1]}`);
+  }
+
   fetch(FORM_URL, {
     method: 'POST',
     body: formData,
     mode: 'no-cors'
   })
   .then(() => {
-    console.log('Quiz results submitted successfully to Google Form');
+    console.log('Quiz results submitted successfully to Google Form (no-cors mode)');
   })
   .catch(error => {
     console.error('Error submitting quiz results:', error);
