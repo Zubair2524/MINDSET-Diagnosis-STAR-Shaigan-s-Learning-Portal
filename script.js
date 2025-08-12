@@ -80,7 +80,9 @@ function showLandingPage() {
 // Show quiz page
 function showQuizPage() {
   document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-  document.getElementById('quiz-page').classList.add('active');
+  const quizPage = document.getElementById('quiz-page');
+  quizPage.classList.add('active');
+  quizPage.scrollIntoView({ behavior: 'smooth' });
   
   // Update header with user name
   document.getElementById('user-name-header').textContent = userData.fullName;
@@ -167,9 +169,13 @@ function displayScenario() {
   document.getElementById('progress-fill').style.width = `${progress}%`;
   document.getElementById('progress-text').textContent = `Scenario ${currentScenario + 1} of 5`;
   
-  // Update scenario content
+  // Update scenario content with animation
+  const quizCard = document.querySelector('.quiz-card');
+  quizCard.classList.remove('active');
+  void quizCard.offsetWidth; // Trigger reflow to restart animation
   document.getElementById('scenario-number').textContent = currentScenario + 1;
   document.getElementById('scenario-text').textContent = scenario.text;
+  quizCard.classList.add('active');
   
   // Create questions but hide them
   const questionsSection = document.getElementById('questions-section');
