@@ -130,16 +130,23 @@ function submitResultsToSheet() {
     body: JSON.stringify(data),
     mode: 'cors'
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
   .then(result => {
     if (result.result === 'success') {
-      console.log('Data successfully submitted to Google Sheet');
+      console.log('Data successfully submitted to Google Sheet:', data);
     } else {
-      console.error('Error submitting data to Google Sheet');
+      console.error('Server responded with error:', result.message);
+      alert('Failed to submit results to Google Sheet: ' + result.message);
     }
   })
   .catch(error => {
-    console.error('Error:', error);
+    console.error('Error submitting data to Google Sheet:', error);
+    alert('Error submitting results to Google Sheet: ' + error.message);
   });
 }
 
