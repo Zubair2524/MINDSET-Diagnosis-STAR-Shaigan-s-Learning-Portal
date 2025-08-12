@@ -1,5 +1,3 @@
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzAA9k0cy6-RvC2PTr5EK90WvKqsxrnoQ2htlmdmuMVS5DYQyC2qCK47XAY8M939NgovQ/exec';
-                         
 // User data management
 let userData = {
   fullName: '',
@@ -15,6 +13,8 @@ let currentQuestion = 0;
 let selectedScenarios = [];
 let answers = [];
 let isQuizActive = false;
+
+const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdzjo7LZhPJxx9ABIPs1rYi3lPSKtrEAx3Lx1dpcClyjXP3pg/formResponse';
 
 // Load user data from localStorage
 function loadUserData() {
@@ -99,11 +99,11 @@ function showResultsPage() {
   document.getElementById('results-page').classList.add('active');
   
   displayResults();
-  submitResultsToSheet(); // Submit results to Google Sheet
+  submitResultsToForm(); // Submit results to Google Form
 }
 
-// Submit results to Google Sheet
-function submitResultsToSheet() {
+// Submit results to Google Form
+function submitResultsToForm() {
   let totalGrowthScore = 0;
   let totalQuestions = 0;
   
@@ -117,30 +117,20 @@ function submitResultsToSheet() {
   const growthPercentage = Math.round((totalGrowthScore / (totalQuestions * 100)) * 100);
   
   const formData = new FormData();
-  formData.append('Full Name', userData.fullName);
-  formData.append('Designation', userData.designation);
-  formData.append('Team/Department', userData.team);
-  formData.append('Base City', userData.city);
-  formData.append('Date', new Date().toISOString().split('T')[0]);
-  formData.append('Email', '');
-  formData.append('Cell Number', '');
-  formData.append('Book', 'Mindset Assessment');
-  formData.append('Score', growthPercentage.toString());
-  formData.append('Grade', '');
-  formData.append('Summary Time', '');
-  formData.append('Quiz Time', '');
-
-  fetch(APPS_SCRIPT_URL, {
+  formData.append('entry.1234567890', userData.fullName); // Replace with actual entry ID for FullName
+  formData.append('entry.1234567891', userData.designation); // Replace with actual entry ID for Designation
+  formData.append('entry.1234567892', userData.team); // Replace with actual entry ID for Team
+  formData.append('entry.1234567893', userData.city); // Replace with actual entry ID for City
+  formData.append('entry.1234567894', userData.assessmentCount.toString()); // Replace with actual entry ID for AssessmentCount
+  formData.append('entry.1234567895', new Date().toISOString()); // Replace with actual entry ID for Timestamp
+  
+  fetch(FORM_URL, {
     method: 'POST',
-    body: formData
+    body: formData,
+    mode: 'no-cors'
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.result === 'success') {
-      console.log('Quiz results submitted successfully:', data);
-    } else {
-      console.error('Error submitting quiz results:', data.error);
-    }
+  .then(() => {
+    console.log('Quiz results submitted successfully to Google Form');
   })
   .catch(error => {
     console.error('Error submitting quiz results:', error);
@@ -209,8 +199,6 @@ function displayScenario() {
   
   // Hide next button during questions
   document.getElementById('next-btn').style.display = 'none';
-  
-  // The questions start with the first one active, assuming "once scenario reading is complete" the first question is shown automatically.
 }
 
 // Handle option selection
@@ -253,7 +241,7 @@ function handleOptionSelect(e) {
       document.getElementById('next-btn').querySelector('span').textContent = 
         currentScenario === 4 ? 'View Results' : 'Next Scenario';
     }
-  }, 0); // No delay as per "without any delay"
+  }, 0);
 }
 
 // Handle next scenario
