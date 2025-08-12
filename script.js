@@ -1,3 +1,5 @@
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzAA9k0cy6-RvC2PTr5EK90WvKqsxrnoQ2htlmdmuMVS5DYQyC2qCK47XAY8M939NgovQ/exec';
+
 // User data management
 let userData = {
   fullName: '',
@@ -95,6 +97,50 @@ function showResultsPage() {
   document.getElementById('results-page').classList.add('active');
   
   displayResults();
+  submitResultsToSheet(); // Submit results to Google Sheet
+}
+
+// Submit results to Google Sheet
+function submitResultsToSheet() {
+  let totalGrowthScore = 0;
+  let totalQuestions = 0;
+  
+  answers.forEach(scenarioAnswers => {
+    scenarioAnswers.forEach(answer => {
+      totalGrowthScore += answer.growthScore;
+      totalQuestions++;
+    });
+  });
+  
+  const growthPercentage = Math.round((totalGrowthScore / (totalQuestions * 100)) * 100);
+  
+  const data = {
+    fullName: userData.fullName,
+    designation: userData.designation,
+    city: userData.city,
+    team: userData.team,
+    score: growthPercentage
+  };
+  
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+    mode: 'cors'
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.result === 'success') {
+      console.log('Data successfully submitted to Google Sheet');
+    } else {
+      console.error('Error submitting data to Google Sheet');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
 }
 
 // Start the quiz
