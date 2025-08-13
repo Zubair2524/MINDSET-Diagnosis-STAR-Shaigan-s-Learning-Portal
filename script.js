@@ -102,7 +102,6 @@ function showResultsPage() {
   submitResultsToForm(); // Submit results to Google Form
 }
 
-
 // Submit results to Google Form
 function submitResultsToForm() {
   let totalGrowthScore = 0;
@@ -143,7 +142,6 @@ function submitResultsToForm() {
   .catch(error => {
     console.error('Fetch error (unexpected with no-cors):', error);
   });
-  }
   
 // Start the quiz
 function startQuiz() {
