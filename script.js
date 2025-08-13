@@ -117,32 +117,26 @@ function submitResultsToForm() {
   const growthPercentage = Math.round((totalGrowthScore / (totalQuestions * 100)) * 100);
   
   const formData = new FormData();
-  formData.append('entry.1990200501', userData.fullName || ''); // FullName
-  formData.append('entry.980754165', userData.designation || ''); // Designation
-  formData.append('entry.1764798855', userData.team || ''); // Team
-  formData.append('entry.123966579', userData.city || ''); // City
-  formData.append('entry.267319038', userData.assessmentCount.toString() || '0'); // AssessmentCount
-  // Temporarily comment out Timestamp until ID is confirmed
-  // formData.append('entry.4444444444', new Date().toISOString() || '');
-
-  // Debug log to verify data
-  console.log('Submitting FormData:');
-  for (let pair of formData.entries()) {
-    console.log(`Field: ${pair[0]} = ${pair[1]}`);
-  }
-
+  formData.append('entry.1990200501', userData.fullName); // FullName
+  formData.append('entry.980754165', userData.designation); // Designation
+  formData.append('entry.1764798855', userData.team); // Team
+  formData.append('entry.123966579', userData.city); // City
+  formData.append('entry.267319038', userData.assessmentCount.toString()); // AssessmentCount
+  formData.append('entry.4444444444', new Date().toISOString()); // Timestamp (placeholder; adjust if ID found)
+  
   fetch(FORM_URL, {
     method: 'POST',
     body: formData,
     mode: 'no-cors'
   })
   .then(() => {
-    console.log('Quiz results submitted successfully to Google Form (no-cors mode)');
+    console.log('Quiz results submitted successfully to Google Form');
   })
   .catch(error => {
-    console.error('Fetch error (unexpected with no-cors):', error);
+    console.error('Error submitting quiz results:', error);
   });
-  
+}
+
 // Start the quiz
 function startQuiz() {
   isQuizActive = true;
