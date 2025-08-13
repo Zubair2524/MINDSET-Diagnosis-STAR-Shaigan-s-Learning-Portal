@@ -143,6 +143,7 @@ function submitResultsToForm() {
   .catch(error => {
     console.error('Fetch error (unexpected with no-cors):', error);
   });
+  }
   
 // Start the quiz
 function startQuiz() {
