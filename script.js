@@ -102,6 +102,7 @@ function showResultsPage() {
   submitResultsToForm(); // Submit results to Google Form
 }
 
+
 // Submit results to Google Form
 function submitResultsToForm() {
   let totalGrowthScore = 0;
@@ -122,11 +123,13 @@ function submitResultsToForm() {
   formData.append('entry.1764798855', userData.team || ''); // Team
   formData.append('entry.123966579', userData.city || ''); // City
   formData.append('entry.267319038', userData.assessmentCount.toString() || '0'); // AssessmentCount
-  formData.append('entry.4444444444', new Date().toISOString() || ''); // Timestamp (placeholder)
-  
+  // Temporarily comment out Timestamp until ID is confirmed
+  // formData.append('entry.4444444444', new Date().toISOString() || '');
+
   // Debug log to verify data
+  console.log('Submitting FormData:');
   for (let pair of formData.entries()) {
-    console.log(`FormData: ${pair[0]} = ${pair[1]}`);
+    console.log(`Field: ${pair[0]} = ${pair[1]}`);
   }
 
   fetch(FORM_URL, {
@@ -138,10 +141,9 @@ function submitResultsToForm() {
     console.log('Quiz results submitted successfully to Google Form (no-cors mode)');
   })
   .catch(error => {
-    console.error('Error submitting quiz results:', error);
+    console.error('Fetch error (unexpected with no-cors):', error);
   });
-}
-
+  
 // Start the quiz
 function startQuiz() {
   isQuizActive = true;
