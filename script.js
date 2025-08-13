@@ -14,8 +14,6 @@ let selectedScenarios = [];
 let answers = [];
 let isQuizActive = false;
 
-const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdzjo7LZhPJxx9ABIPs1rYi3lPSKtrEAx3Lx1dpcClyjXP3pg/formResponse';
-
 // Load user data from localStorage
 function loadUserData() {
   const stored = localStorage.getItem('mindsetAssessmentUser');
@@ -99,10 +97,10 @@ function showResultsPage() {
   document.getElementById('results-page').classList.add('active');
   
   displayResults();
-  submitResultsToForm(); // Submit results to Google Form
+  submitResultsToForm(); // Submit results to Supabase
 }
 
-// Submit results to Google Form
+// Submit results to Supabase
 function submitResultsToForm() {
   let totalGrowthScore = 0;
   let totalQuestions = 0;
@@ -116,25 +114,42 @@ function submitResultsToForm() {
   
   const growthPercentage = Math.round((totalGrowthScore / (totalQuestions * 100)) * 100);
   
-  const formData = new FormData();
-  formData.append('entry.1234567890', userData.fullName); // Replace with actual entry ID for FullName
-  formData.append('entry.1234567891', userData.designation); // Replace with actual entry ID for Designation
-  formData.append('entry.1234567892', userData.team); // Replace with actual entry ID for Team
-  formData.append('entry.1234567893', userData.city); // Replace with actual entry ID for City
-  formData.append('entry.1234567894', userData.assessmentCount.toString()); // Replace with actual entry ID for AssessmentCount
-  formData.append('entry.1234567895', new Date().toISOString()); // Replace with actual entry ID for Timestamp
-  
-  fetch(FORM_URL, {
+  const projectUrl = 'https://nfwuztbyvbasaqbpyojr.supabase.co'; // Replace with your Supabase URL
+  const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5md3V6dGJ5dmJhc2FxYnB5b2pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwNjQ4NzcsImV4cCI6MjA3MDY0MDg3N30.DhEvb6H9kczxdD1N9_d6DmDkk6_9sUGZfKSFk7hYLdQ'; // Replace with your Supabase anon key
+  const tableName = 'quiz_results';
+
+  const recordData = {
+    full_name: userData.fullName || '',
+    designation: userData.designation || '',
+    team: userData.team || '',
+    city: userData.city || '',
+    assessment_count: userData.assessmentCount || 0,
+    growth_percentage: growthPercentage,
+    timestamp: new Date().toISOString() // Added to match table schema
+  };
+
+  fetch(`${projectUrl}/rest/v1/${tableName}`, {
     method: 'POST',
-    body: formData,
-    mode: 'no-cors'
+    headers: {
+      'apikey': apiKey,
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal' // Reduces response size
+    },
+    body: JSON.stringify(recordData)
   })
-  .then(() => {
-    console.log('Quiz results submitted successfully to Google Form');
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    console.log('Quiz results submitted successfully to Supabase');
   })
   .catch(error => {
-    console.error('Error submitting quiz results:', error);
+    console.error('Error submitting to Supabase:', error);
   });
+
+  // Debug log
+  console.log('Submitted Data:', recordData);
 }
 
 // Start the quiz
